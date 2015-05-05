@@ -1,6 +1,6 @@
 package ua.goit.servlets.model;
 
-public class Project {
+public final class Project {
 	private Integer id;
 	private String name;
 	private String description;

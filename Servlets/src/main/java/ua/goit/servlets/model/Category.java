@@ -3,12 +3,12 @@ package ua.goit.servlets.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Category {
-
+public final class Category {
+	
 	private String name;
 	private List<Project> projects;
 
-	public Category(int i, String name) {
+	public Category(String name) {
 		this.name = name;
 		projects = new ArrayList<Project>();
 	}
