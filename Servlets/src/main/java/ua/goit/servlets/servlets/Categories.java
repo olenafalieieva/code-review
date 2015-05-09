@@ -12,15 +12,18 @@ import ua.goit.servlets.dao.CategoriesList;
 import ua.goit.servlets.model.Category;
 
 public class Categories extends HttpServlet {
-
-	private static final long serialVersionUID = 1590679L;
-	private List<Category> categories;
-
+	static final long serialVersionUID = 1590679L;
+	List<Category> categories;
+	
+	public void init() throws ServletException {
+	super.init();
+	categories = CategoriesList.newCategoryInstance();
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res)throws IOException, ServletException {
 		res.setContentType("text/html");
 		PrintWriter writer = res.getWriter();
-		categories = CategoriesList.newCategoryInstance();
 		String categoryName;
 		int len = categories.size();
 		for (int i = 0; i < len; i++) {

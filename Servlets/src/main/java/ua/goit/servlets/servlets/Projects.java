@@ -13,15 +13,19 @@ import ua.goit.servlets.model.Category;
 import ua.goit.servlets.model.Project;
 
 public class Projects extends HttpServlet {
+	static final long serialVersionUID = 15909L;
+	List<Category> categories;
 
-	private static final long serialVersionUID = 15909L;
-	private List<Category> categories;
+	public void init() throws ServletException {
+		super.init();
+		categories = CategoriesList.newCategoryInstance();
+	}
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse res)throws IOException, ServletException {
 		res.setContentType("text/html");
 		PrintWriter writer = res.getWriter();
-		categories = CategoriesList.newCategoryInstance();
+		
 		String categoryName = req.getParameter("category");
 		Category category;
 		int len = categories.size();
