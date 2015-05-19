@@ -14,14 +14,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import ua.goit.servlets.servlets.Categories;
-
 public class TestCategoriesServlet extends Mockito {
-	private Categories servlet;
+	private CategoriesServlet servlet;
 
 	@Before
 	public void setUp() throws ServletException {
-		servlet = new Categories();
+		servlet = new CategoriesServlet();
 		servlet.init();
 	}
 	

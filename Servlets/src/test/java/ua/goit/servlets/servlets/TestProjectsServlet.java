@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,14 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.mockito.Mockito;
 
-import ua.goit.servlets.servlets.Projects;
-
 public class TestProjectsServlet extends Mockito {
-	 Projects servlet;
+	 ProjectsServlet servlet;
 
 	@Before
 	public void setUp() throws ServletException {
-		servlet = new Projects();
+		servlet = new ProjectsServlet();
 		servlet.init();
 	}
 
@@ -32,13 +31,21 @@ public class TestProjectsServlet extends Mockito {
 		HttpServletResponse response = mock(HttpServletResponse.class); 
 		when(request.getRequestURI()).thenReturn("http://localhost:8080/Servlets/projects?category=ART");
 		when(request.getParameter("category")).thenReturn("ART");
-		PrintWriter writer = new PrintWriter("fileServletProjects.txt");
+		//PrintWriter writer = new PrintWriter("fileServletProjects.txt");
+		
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter writer = new PrintWriter(stringWriter);
 		when(response.getWriter()).thenReturn(writer);
-
+		String result = stringWriter.toString();
+//		StringWriter stringWriterExp = new StringWriter();
+//		stringWriterExp.write("<ul><li> Art.1 </li><li> Art.2 </li><li> Art.3 </li></ul>");
+//		String res = stringWriterExp.
+		
 		servlet.doGet(request, response);
 		verify(request, atLeast(1)).getParameter("category");
 		writer.flush();
-		assertTrue(FileUtils.readFileToString(new File("fileServletProjects.txt"))
-				.contains("<ul> <li> Art.1 <br> <li> Art.2 <br> <li> Art.3 <br></li></ul>"));
+//		assertTrue(FileUtils.readFileToString(new File("fileServletProjects.txt"))
+//				.contains("<ul><li> Art.1 </li><li> Art.2 </li><li> Art.3 </li></ul>"));
+		assertEquals("<ul><li> Art.1 </li><li> Art.2 </li><li> Art.3 </li></ul>", result);
 	}
 }
