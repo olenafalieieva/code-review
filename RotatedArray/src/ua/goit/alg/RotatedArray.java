@@ -2,25 +2,25 @@ package ua.goit.alg;
 
 public class RotatedArray {
 
-  public static int searchInRotatedArray(int Array[], int N, int key) {
-	int Left = 0;
-	int Right = N - 1;
+    public static int searchInRotatedArray(int array[], int length, int value) {
+	int left = 0;
+	int right = length - 1;
 
-	while (Left <= Right) {
-	    int Middle = Right >>> 1;
-	    if (Array[Middle] == key) return Middle;
-	    
-	    if (Array[Left] <= Array[Middle]) {
-		if (Array[Left] <= key && key < Array[Middle])
-		    Right = Middle - 1;
+	while (left < right) {
+	    int middle = left + right / 2;
+	    if (array[middle] == value) 
+		return middle;
+	    if (array[left] <= array[middle]) {
+		if (array[left] <= value && value < array[middle])
+		    right = middle - 1;
 		else
-		    Left = Middle + 1;
+		    left = middle + 1;
 	    }
 	    else {
-		if (Array[Middle] < key && key <= Array[Right])
-		    Left = Middle + 1;
+		if (array[middle] < value && value <= array[right])
+		    left = middle + 1;
 		else 
-		    Right = Middle - 1;
+		    right = middle - 1;
 	    }
 	}
 	return -1;
