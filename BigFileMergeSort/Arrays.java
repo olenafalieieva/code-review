@@ -12,50 +12,43 @@ import java.util.Scanner;
 
 public class Arrays {
 
-    
-    
     public static File mergeSort(File file, int blocksize) throws IOException {
 	ArrayList<File> partList = splitSort(file, blocksize);
-	String property = "java.io.tmpdir";
-	String tempDir = System.getProperty(property);
-	//File result = File.createTempFile( "result", ".txt", new File(tempDir));
-	File result = new File("tempDir/RESULT.txt");
+	File result = new File("result.txt");
 	result = mergeParts(partList).get(0);
-	
-	Main.printFile(result);
 	return result;
     }
 
     public static ArrayList<File> mergeParts(ArrayList<File> partList) throws IOException {
+	if (partList.size() ==1) {
+	    return partList;
+	}
 	if (partList.size() > 1) {
 	    ArrayList<File> resultList = new ArrayList<File>();
 	    if (partList.size() % 2 == 1) {
-		partList.add(mergeFiles(partList.get(0), partList.get(1)));
+		File merged = mergeFiles(partList.get(0), partList.get(1));
+		partList.add(merged);
 		partList.remove(1);
 		partList.remove(0);
 	    }
-
 	    for (int i = 0; i < partList.size()-1; i++) {
 		resultList.add(mergeFiles(partList.get(i), partList.get(i+1)));
 		i++;
 	    }
-	    return resultList = mergeParts(resultList);
+	    resultList = mergeParts(resultList);
+	    return resultList;
 	} else {
 	    return partList;
 	}
     }
 
-    private static int counterOfElements = 0;
-
-    public static ArrayList<File> splitSort(File file, int blocksize) throws IOException {
+    private static ArrayList<File> splitSort(File file, int blocksize) throws IOException {
+	int counterOfElements = 0;
 	int tmpint = 0;
 	Scanner sc = null;
 	ArrayList<File> filelist = new ArrayList<File>();
-
 	sc = new Scanner(file);
-
 	while(sc.hasNextInt()) { 
-
 	    int[] array = new int[blocksize]; 
 	    for (int i = 0; i < blocksize; i++) {
 		try {
@@ -73,20 +66,20 @@ public class Arrays {
 
 	if (counterOfElements%blocksize != 0) {
 	    int i = 0;
-	    int modulo = (blocksize-counterOfElements%blocksize)*4; 
-	    int[] tmparray = new int[blocksize-counterOfElements%blocksize];
-	    File file1 = (filelist.get((filelist.size())-1));
-	    while (modulo != blocksize*4) {
+	    int modulo = (counterOfElements % blocksize) * 4; 
+	    int[] tmparray = new int[blocksize - counterOfElements % blocksize];
+	    File file1 = (filelist.get((filelist.size()) - 1));
+	    while (modulo != blocksize * 4) {
 		try {
 		    tmpint = readIntFromFile(file1, modulo);
 		    tmparray[i] = tmpint;
 		    i++;
-		    modulo+=4;
+		    modulo += 4;
 		} catch (NoSuchElementException e) {
 		    break;
 		}	
 	    }
-	    filelist.remove(filelist.size()-1);
+	    filelist.remove(filelist.size() - 1);
 	    filelist.add(writeToTempFile(tmparray));
 	}
 	return filelist; 
@@ -94,7 +87,7 @@ public class Arrays {
 
     static String property = "java.io.tmpdir";
     static String tempDir = System.getProperty(property);
-    
+
     private static File writeToTempFile(int[] array) throws IOException {
 	DataOutputStream fdo = null;
 	File newtmpfile = File.createTempFile( "text", ".txt", new File(tempDir));
@@ -128,22 +121,19 @@ public class Arrays {
     }
 
     public static File mergeFiles(File firstFile, File secondFile) throws IOException {
+	int firstInt; 
+	int secondInt; 
+	long firstPos = 0;
+	long secondPos = 0; 
+	long writePos = 0; 
+	boolean EOF = false;
 
-	int firstInt; //Value of firstFile elements
-	int secondInt; //Value of secondFile elements
-	long firstPos = 0; //Index of firstFile elements
-	long secondPos = 0; //Index of secondFile elements
-	long writePos = 0; //Position in written file
-	boolean EOF = false; //End of file flag
-
-	File file = File.createTempFile("TMPFile", "merge", new File(tempDir));
+	File file = File.createTempFile("TMPFile", ".txt", new File(tempDir));
 	file.deleteOnExit(); 
 	try {
-
 	    firstInt = readIntFromFile(firstFile, firstPos);
 	    secondInt = readIntFromFile(secondFile, secondPos);
 	    while (!EOF) {
-
 		if (firstInt < secondInt) {
 		    writeIntToFile(file, firstInt, writePos);
 		    firstPos=byteInc(firstPos); 
@@ -188,16 +178,15 @@ public class Arrays {
     }
 
     private static int[] sortArray(int[] array) {
-	for(int i = array.length-1 ; i > 0 ; i--){
-	    for(int j = 0 ; j < i ; j++){
-		if( array[j] > array[j+1] ){
+	for(int i = array.length - 1 ; i > 0 ; i--){
+	    for(int j = 0; j < i ; j++){
+		if( array[j] > array[j + 1] ){
 		    int tmp = array[j];
-		    array[j] = array[j+1];
-		    array[j+1] = tmp;
+		    array[j] = array[j + 1];
+		    array[j + 1] = tmp;
 		}
 	    }
 	}
 	return array;
     }
 }
-
