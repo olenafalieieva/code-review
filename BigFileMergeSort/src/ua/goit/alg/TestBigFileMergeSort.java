@@ -1,6 +1,6 @@
 package ua.goit.alg;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.*;
+import org.junit.rules.TemporaryFolder;
 
 public class TestBigFileMergeSort {
 
