@@ -1,23 +1,23 @@
 package ua.goit.alg;
 
 import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import java.util.Arrays;
 import java.util.Scanner;
 
-public class Arrays {
+public class BigFileMergeSort {
 	static final String property = "java.io.tmpdir";
 	static String tempDir = System.getProperty(property);
 
 	public static File mergeSort(File file, int blocksize) throws IOException {
 		ArrayList<File> partList = splitSort(file, blocksize);
 		File result = File.createTempFile("result", ".txt", new File(tempDir));
+		result.deleteOnExit(); 
 		result = mergeParts(partList).get(0);
 		return result;
 	}
@@ -62,7 +62,7 @@ public class Arrays {
 				counterOfElements++;
 				i++;
 			}
-			array=sortArray(array);
+			Arrays.sort(array);
 			filelist.add(writeToTempFile(array));
 		} 
 		sc.close();
@@ -82,15 +82,15 @@ public class Arrays {
 			RandomAccessFile run1 = new RandomAccessFile(fileWhithOverZeros, "rw");
 			int tmpint;
 			int j = 0;
-			while (modulo_start <= modulo_end)  {
-				try {
+			try {
+				while (modulo_start <= modulo_end)  {
 					tmpint = readIntFromFile(run1, modulo_end);
 					tmparray[j] = tmpint;
 					j++;
 					modulo_end -= 4;
-				} finally {
-					run1.close();
 				}
+			} finally {
+				run1.close();
 			}
 			filelist.remove(fileNumber);
 			filelist.add(writeToTempFile(tmparray));
@@ -143,28 +143,28 @@ public class Arrays {
 		while ((firstPos <= endFirst) && (secondPos <= endSecond)) {
 			if ((firstInt <= secondInt) && (firstPos <= endFirst)) {
 				writeIntToFile(run3, firstInt, writePos);
-				writePos = byteInc(writePos);
-				firstPos = byteInc(firstPos);
+				writePos = moveOnNextPos(writePos);
+				firstPos = moveOnNextPos(firstPos);
 				if (firstPos <= endFirst) {
 					firstInt = readIntFromFile(run1, firstPos);
 				} else {
 					while (secondPos <= endSecond) {
 						writeIntToFile(run3, readIntFromFile(run2, secondPos),  writePos);
-						secondPos = byteInc(secondPos); 
-						writePos = byteInc(writePos);
+						secondPos = moveOnNextPos(secondPos); 
+						writePos = moveOnNextPos(writePos);
 					}
 				}
 			} else if ((firstInt > secondInt) && (secondPos <= endSecond)) {
 				writeIntToFile(run3, secondInt, writePos);
-				secondPos = byteInc(secondPos); 
-				writePos = byteInc(writePos);
+				secondPos = moveOnNextPos(secondPos); 
+				writePos = moveOnNextPos(writePos);
 				if (secondPos <= endSecond) {
 					secondInt = readIntFromFile(run2, secondPos);
 				} else {
 					while (firstPos <= endFirst) {
 						writeIntToFile(run3, readIntFromFile(run1, firstPos),  writePos);
-						firstPos = byteInc(firstPos); 
-						writePos = byteInc(writePos);
+						firstPos = moveOnNextPos(firstPos); 
+						writePos = moveOnNextPos(writePos);
 					}
 				}
 			}
@@ -176,20 +176,7 @@ public class Arrays {
 		return file;
 	}
 
-	private static long byteInc(long pos) {
+	private static long moveOnNextPos(long pos) {
 		return pos+4;
-	}
-
-	private static int[] sortArray(int[] array) {
-		for(int i = array.length - 1 ; i > 0 ; i--){
-			for(int j = 0; j < i ; j++){
-				if( array[j] > array[j + 1] ){
-					int tmp = array[j];
-					array[j] = array[j + 1];
-					array[j + 1] = tmp;
-				}
-			}
-		}
-		return array;
 	}
 }
