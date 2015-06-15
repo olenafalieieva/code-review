@@ -36,7 +36,7 @@ public class TestCategoriesServlet extends Mockito {
 	String result = stringWriter.toString();
 	writer.flush();
 
-	assertEquals("<a href=/Servlets/projects?category=IT>IT</a><br>"
-		+ "<a href=/Servlets/projects?category=ART>ART</a><br>", result);
+	assertEquals(result, "<a href=/Servlets/projects?category=1>IT</a><br>"
+		+ "<a href=/Servlets/projects?category=2>ART</a><br>");
   }
 }
