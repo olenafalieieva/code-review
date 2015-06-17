@@ -9,7 +9,7 @@ public class Project {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-	}
+	}	
 	
 	public Project(Integer id, String name) {
 		this.id = id;

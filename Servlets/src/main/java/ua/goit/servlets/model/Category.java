@@ -4,24 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Category {
+    private int id;
+    private String name;
+    private List<Project> projects;
 
-  private String name;
-  private List<Project> projects;
-
-  public Category(String name) {
+    public Category(int id, String name) {
+	this.id = id;
 	this.name = name;
 	projects = new ArrayList<Project>();
-  }
+    }
 
-  public String getName() {
+    public int getID() {
+	return id;
+    }
+    
+    public String getName() {
 	return name;
-  }
+    }
 
-  public  List<Project> getProjects() {
+    public  List<Project> getProjects() {
 	return projects;
-  }
+    }
 
-  public void addProject(Integer id, String projectName){
+    public void addProject(Integer id, String projectName){
 	projects.add(new Project(id, projectName));
-  }
+    }
 }
