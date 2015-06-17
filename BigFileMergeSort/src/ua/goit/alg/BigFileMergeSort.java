@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class BigFileMergeSort {
@@ -23,81 +25,52 @@ public class BigFileMergeSort {
 	}
 
 	private static ArrayList<File> mergeParts(ArrayList<File> partList) throws IOException {
-		ArrayList<File> result = null;	
+		ArrayList<File> result;
 		if (partList.size() <= 1) {
 			result = partList;
 		} else {
-			result =  mergePartsProcess(partList);
+			if (partList.size() % 2 == 1) {
+				File merged = mergeFiles(partList.get(0), partList.get(1));
+				partList.add(merged);
+				partList.remove(1);
+				partList.remove(0);
+			}
+			ArrayList<File> tempList = new ArrayList<File>();
+			while (partList.size() > 1) {
+				for (int i = 0; i < partList.size()-1; i+=2) {
+					tempList.add(mergeFiles(partList.get(i), partList.get(i + 1)));
+				}
+				partList = tempList;
+				tempList = new ArrayList<File>();
+			}
 		} 
-		return result;
-	}
 
-	private static ArrayList<File> mergePartsProcess(ArrayList<File> partList)
-			throws IOException {
-		ArrayList<File> resultList = new ArrayList<File>();
-		if (partList.size() % 2 == 1) {
-			File merged = mergeFiles(partList.get(0), partList.get(1));
-			partList.add(merged);
-			partList.remove(1);
-			partList.remove(0);
-		}
-		for (int i = 0; i < partList.size()-1; i+=2) {
-			resultList.add(mergeFiles(partList.get(i), partList.get(i+1)));
-		}
-		resultList = mergeParts(resultList);
-		return resultList;
+		return partList;
 	}
 
 	private static ArrayList<File> splitSort(File file, int blocksize) throws IOException {
-		int counterOfElements = 0;
 		int tmpint = 0;
 		Scanner sc = new Scanner(file);
-		ArrayList<File> filelist = new ArrayList<File>();
+		ArrayList<File> filelist = new ArrayList<>();
 		while (sc.hasNextInt()) { 
-			int[] array = new int[blocksize]; 
+			List<Integer> list = new ArrayList<>(); 
 			int i = 0;
-			while ((i < blocksize) && sc.hasNextInt()){
+			while ((i < blocksize) && sc.hasNextInt()) {
 				tmpint = sc.nextInt();
-				array[i] = tmpint;
-				counterOfElements++;
+				list.add(tmpint); 
 				i++;
 			}
-			Arrays.sort(array);
+			Collections.sort(list);
+			Integer[] array = new Integer[list.size()];
+			list.toArray(array);
 			filelist.add(writeToTempFile(array));
 		} 
 		sc.close();
-		removeExtraZeros(blocksize, counterOfElements, filelist);
+
 		return filelist; 
 	}
 
-	private static void removeExtraZeros(int blocksize, int counterOfElements,
-			ArrayList<File> filelist) throws FileNotFoundException, IOException {
-
-		if (counterOfElements % blocksize != 0) {
-			int modulo_start = (blocksize - counterOfElements % blocksize) * 4; 
-			int modulo_end = (blocksize) * 4 - 4;
-			int[] tmparray = new int[counterOfElements % blocksize];
-			int fileNumber = filelist.size() - 1;
-			File fileWhithOverZeros = filelist.get(fileNumber);
-			RandomAccessFile run1 = new RandomAccessFile(fileWhithOverZeros, "rw");
-			int tmpint;
-			int j = 0;
-			try {
-				while (modulo_start <= modulo_end)  {
-					tmpint = readIntFromFile(run1, modulo_end);
-					tmparray[j] = tmpint;
-					j++;
-					modulo_end -= 4;
-				}
-			} finally {
-				run1.close();
-			}
-			filelist.remove(fileNumber);
-			filelist.add(writeToTempFile(tmparray));
-		}
-	}  
-
-	private static File writeToTempFile(int[] array) throws IOException {
+	private static File writeToTempFile(Integer[] array) throws IOException {
 		DataOutputStream fdo = null;
 		File newtmpfile = File.createTempFile("text", ".txt", new File(tempDir));
 		newtmpfile.deleteOnExit(); 
@@ -109,6 +82,7 @@ public class BigFileMergeSort {
 		} finally {
 			fdo.close();
 		}
+		
 		return newtmpfile;
 	}
 
@@ -132,47 +106,46 @@ public class BigFileMergeSort {
 
 		File file = File.createTempFile("TMPFile", ".txt", new File(tempDir));
 		file.deleteOnExit(); 
-		RandomAccessFile run1 = new RandomAccessFile(firstFile, "rw");
-		RandomAccessFile run2 = new RandomAccessFile(secondFile, "rw");
-		RandomAccessFile run3 = new RandomAccessFile(file, "rw");
-		firstInt = readIntFromFile(run1, firstPos);
-		secondInt = readIntFromFile(run2, secondPos);
+		RandomAccessFile source1 = new RandomAccessFile(firstFile, "r");
+		RandomAccessFile source2 = new RandomAccessFile(secondFile, "r");
+		RandomAccessFile result = new RandomAccessFile(file, "rw");
+		firstInt = readIntFromFile(source1, firstPos);
+		secondInt = readIntFromFile(source2, secondPos);
 		long endFirst = firstFile.length() - 4;
 		long endSecond = secondFile.length() - 4;
 
 		while ((firstPos <= endFirst) && (secondPos <= endSecond)) {
 			if ((firstInt <= secondInt) && (firstPos <= endFirst)) {
-				writeIntToFile(run3, firstInt, writePos);
+				writeIntToFile(result, firstInt, writePos);
 				writePos = moveOnNextPos(writePos);
 				firstPos = moveOnNextPos(firstPos);
 				if (firstPos <= endFirst) {
-					firstInt = readIntFromFile(run1, firstPos);
+					firstInt = readIntFromFile(source1, firstPos);
 				} else {
 					while (secondPos <= endSecond) {
-						writeIntToFile(run3, readIntFromFile(run2, secondPos),  writePos);
+						writeIntToFile(result, readIntFromFile(source2, secondPos),  writePos);
 						secondPos = moveOnNextPos(secondPos); 
 						writePos = moveOnNextPos(writePos);
 					}
 				}
 			} else if ((firstInt > secondInt) && (secondPos <= endSecond)) {
-				writeIntToFile(run3, secondInt, writePos);
+				writeIntToFile(result, secondInt, writePos);
 				secondPos = moveOnNextPos(secondPos); 
 				writePos = moveOnNextPos(writePos);
 				if (secondPos <= endSecond) {
-					secondInt = readIntFromFile(run2, secondPos);
+					secondInt = readIntFromFile(source2, secondPos);
 				} else {
 					while (firstPos <= endFirst) {
-						writeIntToFile(run3, readIntFromFile(run1, firstPos),  writePos);
+						writeIntToFile(result, readIntFromFile(source1, firstPos),  writePos);
 						firstPos = moveOnNextPos(firstPos); 
 						writePos = moveOnNextPos(writePos);
 					}
 				}
 			}
-
 		} 
-		run1.close();
-		run2.close();
-		run3.close();
+		source1.close();
+		source2.close();
+		result.close();
 		return file;
 	}
 
