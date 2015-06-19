@@ -14,6 +14,9 @@ public class MergeSort {
 
     public int[] mergeSort(int[] array) {
 	int length = array.length;
+	if (length == 0 ) {
+	    return array;
+	}
 	if (length == 1 ) {
 	    return array;
 	}
