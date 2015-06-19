@@ -1,16 +1,21 @@
 package ua.goit.alg;
 
 public class FindDistance {
-	
+
 	public static int minDistance(int[] input) {
 		int distance;
-		if (input.length == 1) {
+		if (input.length == 0) {
 			distance = 0;
 			return distance;
+			
+		} else if (input.length == 1) {
+			distance = 0;
+			return distance;
+			
 		} else if (input.length == 2) {
 			distance = 1;
 			return distance;
-		}
+		} 	
 		
 		int min1 = input[0];
 		int minIndex1 = 0;
@@ -34,7 +39,7 @@ public class FindDistance {
 			}
 		}
 		distance = Math.abs(minIndex1 - minIndex2);	
-		
+
 		return distance;
-	}
+	} 
 }

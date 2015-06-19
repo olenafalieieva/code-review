@@ -22,6 +22,14 @@ public class TestFindDistance {
   }
   
   @Test
+  public void theEmptyArr() {
+	int[] input = {};
+	int expectedDistance = 0;
+	int actualDistance = FindDistance.minDistance(input);
+	assertEquals(expectedDistance, actualDistance);
+  }
+  
+  @Test
   public void theSingleValue() {
 	int[] input = {1};
 	int expectedDistance = 0;
