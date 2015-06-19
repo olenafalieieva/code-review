@@ -1,7 +1,6 @@
 package ua.goit.alg;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class TestFindDistance {
@@ -23,14 +22,6 @@ public class TestFindDistance {
   }
   
   @Test
-  public void theSameValues() {
-	int[] input = {1, 1, 1, 1, 1, 1, 1, 1};
-	int expectedDistance = 0;
-	int actualDistance = FindDistance.minDistance(input);
-	assertEquals(expectedDistance, actualDistance);
-  }
-  
-  @Test
   public void theSingleValue() {
 	int[] input = {1};
 	int expectedDistance = 0;
@@ -39,10 +30,20 @@ public class TestFindDistance {
   }
   
   @Test
-  public void twoVal() {
+  public void twoValues() {
 	int[] input = {1, 2};
 	int expectedDistance = 1;
 	int actualDistance = FindDistance.minDistance(input);
 	assertEquals(expectedDistance, actualDistance);
   }
+  
+  @Test
+  public void theSameValues() {
+	int[] input = {1, 1, 1, 1, 1, 1, 1, 1};
+	int expectedDistance = 0;
+	int actualDistance = FindDistance.minDistance(input);
+	assertEquals(expectedDistance, actualDistance);
+  }
+  
+  
 }
