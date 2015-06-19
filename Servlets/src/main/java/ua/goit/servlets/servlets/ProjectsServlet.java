@@ -3,6 +3,8 @@ package ua.goit.servlets.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +16,7 @@ import ua.goit.servlets.model.Project;
 
 public class ProjectsServlet extends HttpServlet {
     static final long serialVersionUID = 15909L;
-    List<Category> categories; //visible for testing
+    Map<Integer, Category> categories; //visible for testing
 
     public void init() throws ServletException {
 	super.init();
@@ -31,15 +33,9 @@ public class ProjectsServlet extends HttpServlet {
     }
 
     private List<Project> getProjectsForCategory(int categoryID) {
-	int len = categories.size();
-	List<Project> projects = null;
-	for (int i = 0; i < len; i++) {
-	    Category category = categories.get(i);
-	    int actualCatID = category.getID();
-	    if (categoryID == (actualCatID)) {
-		projects = category.getProjects();
-	    }
-	}
+	Category category = categories.get(categoryID);
+	List<Project> projects = category.getProjects();
+	
 	return projects;
     }
 
@@ -47,7 +43,8 @@ public class ProjectsServlet extends HttpServlet {
 	res.setContentType("text/html");
 	PrintWriter writer = res.getWriter();
 	writer.write("<ul>");
-	for (int j = 0; j < projects.size(); j++) {
+	int size = projects.size();
+	for (int j = 0; j < size; j++) {
 	    String projectName = projects.get(j).getName();
 	    writer.write(String.format("<li> %s </li>", projectName));
 	}

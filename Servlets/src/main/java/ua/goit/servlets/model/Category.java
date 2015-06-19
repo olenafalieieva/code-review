@@ -3,10 +3,10 @@ package ua.goit.servlets.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Category {
-    private int id;
-    private String name;
-    private List<Project> projects;
+public class Category {
+    final private int id;
+    final private String name;
+    final private List<Project> projects;
 
     public Category(int id, String name) {
 	this.id = id;
@@ -17,7 +17,7 @@ public final class Category {
     public int getID() {
 	return id;
     }
-    
+
     public String getName() {
 	return name;
     }

@@ -1,12 +1,12 @@
 package ua.goit.servlets.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import ua.goit.servlets.model.Category;
 
 public class CategoriesList {
-
-	public static List<Category> getAllCategories() {
+    static Map<Integer, Category> categoriesMap = new HashMap<Integer, Category>();
+	public static Map<Integer, Category> getAllCategories() {
 		final Category it = new Category(1, "IT");
 		{
 			it.addProject(1, "IT.1");
@@ -19,9 +19,9 @@ public class CategoriesList {
 			art.addProject(2, "Art.2");
 			art.addProject(3, "Art.3");
 		}
-		List<Category> categoriesList = new ArrayList<Category>();
-		categoriesList.add(it);
-		categoriesList.add(art);
-		return categoriesList;
+		
+		categoriesMap.put(it.getID(), it);
+		categoriesMap.put(art.getID(), art);
+		return categoriesMap;
 	}
 }

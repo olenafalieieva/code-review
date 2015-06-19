@@ -27,7 +27,7 @@ public class TestProjectsServlet extends Mockito {
   public void testServlet() throws Exception {
 	HttpServletRequest request = mock(HttpServletRequest.class);       
 	HttpServletResponse response = mock(HttpServletResponse.class); 
-	when(request.getRequestURI()).thenReturn("http://localhost:8080/Servlets/projects?category=ART");
+	when(request.getRequestURI()).thenReturn("http://localhost:8080/Servlets/projects?category=2");
 	when(request.getParameter("category")).thenReturn("2");
 
 	StringWriter stringWriter = new StringWriter();
