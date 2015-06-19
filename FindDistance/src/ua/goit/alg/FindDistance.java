@@ -1,7 +1,6 @@
 package ua.goit.alg;
 
 public class FindDistance {
-
 	public static int minDistance(int[] input) {
 		int distance;
 		if (input.length == 0) {
