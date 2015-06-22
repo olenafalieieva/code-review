@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class Anagrams {
 
-	public static void Anagram(InputStream in) {
-		Scanner sc = new Scanner(System.in);
+	public static void anagram(InputStream in) {
+		Scanner sc = new Scanner(in);
 		String input = null;
 		int j = 0;
 		int i = 0;
