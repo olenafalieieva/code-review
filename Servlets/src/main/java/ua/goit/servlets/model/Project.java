@@ -1,31 +1,31 @@
 package ua.goit.servlets.model;
 
 public class Project {
-  final private Integer id;
-  final private String name;
-  final private String description;
+    final private Integer id;
+    final private String name;
+    final private String description;
 
-	public Project(Integer id, String name, String description) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-	}	
-	
-	public Project(Integer id, String name) {
-		this.id = id;
-		this.name = name;
-		this.description = null;
-	}
-	
-	public Integer getId() {
-		return id;
-	}
+    public Project(Integer id, String name, String description) {
+	this.id = id;
+	this.name = name;
+	this.description = description;
+    }	
 
-	public String getName() {
-		return name;
-	}
+    public Project(Integer id, String name) {
+	this.id = id;
+	this.name = name;
+	this.description = null;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public Integer getId() {
+	return id;
+    }
+
+    public String getName() {
+	return name;
+    }
+
+    public String getDescription() {
+	return description;
+    }
 }

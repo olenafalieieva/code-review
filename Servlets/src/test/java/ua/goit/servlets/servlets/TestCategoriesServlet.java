@@ -14,16 +14,16 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 public class TestCategoriesServlet extends Mockito {
-  private CategoriesServlet servlet;
+    private CategoriesServlet servlet;
 
-  @Before
-  public void setUp() throws ServletException {
+    @Before
+    public void setUp() throws ServletException {
 	servlet = new CategoriesServlet();
 	servlet.init();
-  }
+    }
 
-  @Test
-  public void testServlet() throws Exception {
+    @Test
+    public void testServlet() throws Exception {
 	HttpServletRequest request = mock(HttpServletRequest.class);       
 	HttpServletResponse response = mock(HttpServletResponse.class); 
 	when(request.getRequestURI()).thenReturn("http://localhost:8080/Servlets/categories");
@@ -38,5 +38,5 @@ public class TestCategoriesServlet extends Mockito {
 
 	assertEquals(result, "<a href=/Servlets/projects?category=1>IT</a><br>"
 		+ "<a href=/Servlets/projects?category=2>ART</a><br>");
-  }
+    }
 }

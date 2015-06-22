@@ -35,7 +35,7 @@ public class ProjectsServlet extends HttpServlet {
     private List<Project> getProjectsForCategory(int categoryID) {
 	Category category = categories.get(categoryID);
 	List<Project> projects = category.getProjects();
-	
+
 	return projects;
     }
 
