@@ -8,11 +8,13 @@ public class RotatedArray {
 	if ((length == 1) && (value == array[length - 1])) {
 	    return 0;
 	}
+
 	while (left < right) {
 	    int middle = left + right / 2;
 	    if (array[middle] == value) {
 		return middle;
-	    }	    
+	    }
+
 	    if (array[left] <= array[middle]) {
 		if (array[left] <= value && value < array[middle]) {
 		    right = middle - 1;

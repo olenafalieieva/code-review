@@ -15,16 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.mockito.Mockito;
 
 public class TestProjectsServlet extends Mockito {
-  ProjectsServlet servlet;
+    ProjectsServlet servlet;
 
-  @Before
-  public void setUp() throws ServletException {
+    @Before
+    public void setUp() throws ServletException {
 	servlet = new ProjectsServlet();
 	servlet.init();
-  }
+    }
 
-  @Test
-  public void testServlet() throws Exception {
+    @Test
+    public void testServlet() throws Exception {
 	HttpServletRequest request = mock(HttpServletRequest.class);       
 	HttpServletResponse response = mock(HttpServletResponse.class); 
 	when(request.getRequestURI()).thenReturn("http://localhost:8080/Servlets/projects?category=2");
@@ -40,5 +40,5 @@ public class TestProjectsServlet extends Mockito {
 	writer.flush();
 
 	assertEquals("<ul><li> Art.1 </li><li> Art.2 </li><li> Art.3 </li></ul>", result);
-  }
+    }
 }
