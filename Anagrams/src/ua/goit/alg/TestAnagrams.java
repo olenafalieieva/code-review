@@ -15,8 +15,7 @@ public class TestAnagrams {
     public void twoWords() throws UnsupportedEncodingException {
         String input = "hello world!";
         String expected = " olleh !dlrow";
-        InputStream stubInputStream = new ByteArrayInputStream(input.getBytes("UTF-8"));
-        String actual = outputToString(stubInputStream);
+        String actual = outputToString(input);
         assertEquals(expected, actual);
     }
 
@@ -24,20 +23,21 @@ public class TestAnagrams {
     public void threeWords() throws UnsupportedEncodingException {
         String expected = " yM  eman :si";
         String input = "My name is:";
-        InputStream stubInputStream = new ByteArrayInputStream(input.getBytes("UTF-8"));
-        String actual = outputToString(stubInputStream);
+        String actual = outputToString(input);
         assertEquals(expected, actual);
     }
 
-    private String outputToString(InputStream stubInputStream) {
+    private String outputToString(String input) throws UnsupportedEncodingException {
+        InputStream bais = new ByteArrayInputStream(input.getBytes("UTF-8"));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
         System.setOut(ps);
-        Anagrams.anagram(stubInputStream);
+        Anagrams.anagram(bais);
         System.out.flush();
         System.setOut(old);
         String result = baos.toString();
+        
         return result;
     }
 }

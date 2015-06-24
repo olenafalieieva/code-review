@@ -6,8 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class BigFileMergeSort {
@@ -48,32 +47,54 @@ public class BigFileMergeSort {
 
     private static ArrayList<File> splitSort(File file, int blocksize) throws IOException {
         int tmpint = 0;
+        int countInt = 0;
+        Scanner scInt = new Scanner(file);
+        while (scInt.hasNextInt()) {
+            tmpint = scInt.nextInt();
+            countInt++;
+        }
+        scInt.close();
+        
         Scanner sc = new Scanner(file);
         ArrayList<File> filelist = new ArrayList<>();
+        long blocksQ = countInt / blocksize;
+        int rest = (int) (countInt % blocksize);
+        int blocksCount = 0;
+
         while (sc.hasNextInt()) { 
-            List<Integer> list = new ArrayList<>(); 
-            int i = 0;
-            while ((i < blocksize) && sc.hasNextInt()) {
-                tmpint = sc.nextInt();
-                list.add(tmpint); 
-                i++;
+            if (blocksCount < blocksQ) { 
+                int[] array = new int[blocksize]; 
+                for (int i = 0; i < blocksize; i++) {
+                    tmpint = sc.nextInt();
+                    array[i] = tmpint; 
+                }
+                blocksCount++;
+
+                Arrays.sort(array);
+                filelist.add(writeToTempFile(array));
             }
-            Collections.sort(list);
-            filelist.add(writeToTempFile(list));
+            else if ((blocksCount == blocksQ) && (rest != 0)) {
+                int[] endArray  = new int[rest]; 
+                for (int i = 0; i < rest; i++) {
+                    tmpint = sc.nextInt();
+                    endArray[i] = tmpint; 
+                }
+                Arrays.sort(endArray);
+                filelist.add(writeToTempFile(endArray));
+            } 
         } 
         sc.close();
-
         return filelist; 
     }
 
-    private static File writeToTempFile(List<Integer> list) throws IOException {
+    private static File writeToTempFile(int[] array) throws IOException {
         DataOutputStream fdo = null;
         File newtmpfile = File.createTempFile("text", ".txt", new File(tempDir));
         newtmpfile.deleteOnExit(); 
         try {
             fdo = new DataOutputStream(new FileOutputStream(newtmpfile));
-            for(int i = 0; i < list.size(); i++) {
-                fdo.writeInt(list.get(i));
+            for(int i = 0; i < array.length; i++) {
+                fdo.writeInt(array[i]);
             }
         } finally {
             fdo.close();

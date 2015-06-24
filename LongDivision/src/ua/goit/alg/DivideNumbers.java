@@ -17,18 +17,19 @@ public class DivideNumbers {
         int divisor = sc.nextInt();
         int second = divisor;
         sc.close();
-
-        if (divisor == 0) {
-            throw new IllegalArgumentException("Error: Divide by zero!");
-        }
-
+        
         boolean isPoint = false;
         StringBuilder divProcess = new StringBuilder();
         StringBuilder result = new StringBuilder();
         int accuracy = 5;
         int decimal = 0;
 
-        if ((dividend < 0) ^ (divisor < 0)) {
+        if (divisor == 0) {
+            throw new IllegalArgumentException("Error: Divide by zero!");
+        }
+
+        int signDetector = dividend * divisor;
+        if (signDetector < 0) {
             result.append("-");
         } 
 
@@ -40,7 +41,6 @@ public class DivideNumbers {
         int shift = 0;
         while ((dividend != 0) && (decimal < accuracy)) {
             if (Math.abs(dividend) > Math.abs(divisor)) {
-
                 dividend = doNextDividend(dividend, divisor, divProcess, shift, result); 
                 decimal++;
                 shift++;
